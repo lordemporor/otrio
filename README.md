@@ -12,7 +12,7 @@ otriomanager manages the game. It creates a game and asks each group what they w
 otriomanager requests from the seperate modules to play when it decides its their turn.  
 There are 4 types of players:  
 Random - Places in a random spot that is allowed  
-Algorithm - An algorithm that just tries to win in a single row. It doesn't block nor try to win in two places at once  
+Algorithm - An algorithm that just tries to win. It doesn't block nor try to win in two places at once  
  Note: *Algorithm would be super easy against a human, its made solely for training the ai how to block*  
 Human - A human player interfaced through otriographics.py  
 Ai - Q-Learning AI that is the main goal of the project, to make a decent one.  
