@@ -1,5 +1,4 @@
 from otriogameboard import game
-from otriographics import window
 from random import randint
 
 
@@ -116,7 +115,6 @@ class algorithm_player(player):
 
 
 print("Game creation starting")
-window = window()
 print("Window created")
 print("Game creation specifications")
 raw_player_count_input = input("Number of players (int)? ")
