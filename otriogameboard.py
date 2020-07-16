@@ -109,7 +109,7 @@ class game():
     def get_winner(self):
         integer_game_winner = 0
         win_type_str = ''
-        for player in range(self.player_count):
+        for player in range(self.player_count + 1):
             for spot in range(3):
                 if self.checkHLineWin(spot, str(player)):
                     integer_game_winner = player
@@ -134,7 +134,7 @@ class game():
             placement_permitted = True
         if placement_permitted:
             #Place piece
-            ring_index_to_update = int(ring)
+            ring_index_to_update = int(ring) - 1
             updated_board_location = ''
             for ring_location in range(3):
                 if ring_location == ring_index_to_update:
