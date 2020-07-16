@@ -93,7 +93,7 @@ class game():
         return self.game_state_string
 
     def reset(self, player_count_input):
-        self.open_places = "A1A2A3B1B2B3C1C2C3D1D2D3E1E2E3F1F2F3G1G2GH1H2H3I1I2I3"  # Beginning open places to go
+        self.open_places = "A1A2A3B1B2B3C1C2C3D1D2D3E1E2E3F1F2F3G1G2G3H1H2H3I1I2I3"  # Beginning open places to go
         self.all_letter_name_positions = "ABCDEFGHI"
         self.player_count = player_count_input
         self.remaining_pieces = []
@@ -108,14 +108,24 @@ class game():
 
     def get_winner(self):
         integer_game_winner = 0
+        win_type_str = ''
         for player in range(self.player_count):
-            for spot in range(2):
-                if self.checkHLineWin(spot, str(player)) or self.checkVLineWin(spot, str(player)):
+            for spot in range(3):
+                if self.checkHLineWin(spot, str(player)):
                     integer_game_winner = player
-            if self.checkDiagonalWin(str(player)) or self.checkSameWin(str(player)):
+                    win_type_str = 'hline ' + str(spot)
+                if self.checkVLineWin(spot, str(player)):
+                    integer_game_winner = player
+                    win_type_str = 'vline ' + str(spot)
+            if self.checkDiagonalWin(str(player)):
                 integer_game_winner = player
+                win_type_str = 'diagonal'
+            if self.checkSameWin(str(player)):
+                integer_game_winner = player
+                win_type_str = 'concentric'
+
         self.game_winner = str(integer_game_winner)
-        return str(integer_game_winner)
+        return str(integer_game_winner), win_type_str
 
     def place_ring(self, pos, ring, player):
         requested_x, requested_y = self.letterPositionLookUp(pos)
@@ -123,15 +133,21 @@ class game():
         if self.gameboard[requested_y][requested_x][int(ring) - 1] == "0" and self.remaining_pieces[int(player) - 1][int(ring) - 1] > 0:
             placement_permitted = True
         if placement_permitted:
-            new_ring = int(ring)
-            board_update = self.gameboard[requested_y][requested_x]
             #Place piece
-            self.gameboard[requested_y][requested_x] = board_update[:(int(new_ring) - 1)] + player + board_update[(int(new_ring)):]
+            ring_index_to_update = int(ring)
+            updated_board_location = ''
+            for ring_location in range(3):
+                if ring_location == ring_index_to_update:
+                    updated_board_location += player
+                else:
+                    updated_board_location += self.gameboard[requested_y][requested_x][ring_location:ring_location + 1]
+            self.gameboard[requested_y][requested_x] = updated_board_location
+
             #Subtract ring
             self.remaining_pieces[int(player) - 1][int(ring) - 1] -= 1
+
             #Remove from open places
             self.open_places = self.open_places.replace((str(pos) + str(ring)), "")
-
 
         return placement_permitted
 
@@ -164,15 +180,13 @@ class game():
 
     def render_ascii(self):
         board = self.get_game_state()
-        print('************   otrio   ************')
-        print('  by broskisworld and lordemperor  ')
-        print('')
+        #print('************   otrio   ************')
+        #print('  by broskisworld and lordemperor  ')
+        #print('***********************************')
+        #print('')
         print(' A | B | C ')
-        print(f'{board[0:2]}|{board[4:6]}|{board[8:10]}')
-        print('   |   |   ')
+        print(f'{board[1:4]}|{board[5:8]}|{board[9:12]}')
         print(' D | E | F ')
-        print(f'{board[12:14]}|{board[16:18]}|{board[20:22]}')
-        print('   |   |   ')
+        print(f'{board[13:16]}|{board[17:20]}|{board[21:24]}')
         print(' G | H | I ')
-        print(f'{board[23:25]}|{board[26:28]}|{board[29:31]}')
-        print('   |   |   ')
+        print(f'{board[25:28]}|{board[29:32]}|{board[33:36]}')
